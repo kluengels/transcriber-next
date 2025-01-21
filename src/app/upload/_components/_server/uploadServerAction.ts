@@ -3,15 +3,15 @@
 Steps:
 0) prechecks: return early if no file submitted or too big
 1) User authentication with supabase
-2) Write file stream to disc 
+2) Write file stream to disc
 3) Check if user has free credits or an own API Key set
-4) if file is smaller than 25 MB (Size limit by OpenAi) -> make API Call to OpenAI and skip steps 5) and 6) 
+4) if file is smaller than 25 MB (Size limit by OpenAi) -> make API Call to OpenAI and skip steps 5) and 6)
 5) Split input file into chunks < 25 MB
 6) API Call to OpenAi with every chunk
 7) Create a project in supabase and write transcript to it
 8) Upload input file to supabase storage
 
-Clean-up-function to delete files an server is called at end 
+Clean-up-function to delete files an server is called at end
 */
 
 "use server";
@@ -29,7 +29,7 @@ import {
   uploadFile,
 } from "@/lib/supabase/actions";
 import { revalidatePath } from "next/cache";
-import mime from "mime";
+// import mime from "mime";
 
 // size config
 const maxInputSize: number =
@@ -107,7 +107,7 @@ export async function uploadServerAction(formData: FormData) {
     );
     projectFolder = updatedProjectFolder;
     // check mime type:
-    const mimeType = mime.getType(pathToFile);
+    // const mimeType = mime.getType(pathToFile);
 
     // (3) -- check if user has enough free credits or an OpenAI-key set
 
@@ -116,7 +116,7 @@ export async function uploadServerAction(formData: FormData) {
     try {
       duration = (await getAudioDurationInSeconds(pathToFile)) as number;
       // console.log("duration", duration);
-    } catch (error) {
+    } catch  {
       throw "Failed to get audio duration";
     }
 
@@ -224,7 +224,7 @@ const writeToDisc = async (file: File, projectFolder: string | undefined) => {
       recursive: true,
     });
     if (!projectFolder) throw "failed to create project Folder";
-  } catch (error) {
+  } catch  {
     throw "Failed to write project Folder";
   }
 
@@ -331,7 +331,7 @@ const createChunks = async (
       recursive: true,
     });
     if (!chunksFolder) throw "Failed to create a folder for chunks";
-  } catch (error) {
+  } catch  {
     throw "Failed to create a folder for chunks";
   }
 
@@ -346,7 +346,7 @@ const createChunks = async (
     // use ffmpeg to create chunks
     await splitAudio(inputPath, outputPath, chunkDuration);
     // console.log("> chunks written to disk");
-  } catch (error) {
+  } catch  {
     throw "Failed to split file";
   }
 
@@ -364,7 +364,7 @@ const createChunks = async (
       // write to chunks array
       chunks.push(pathToChunkfile);
     }
-  } catch (error) {
+  } catch {
     throw "Failed to find chunks";
   }
   return chunks;

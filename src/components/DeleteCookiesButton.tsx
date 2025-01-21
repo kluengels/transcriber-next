@@ -27,7 +27,6 @@ export default function DeleteCookiesButton() {
       const cookies = Object.keys(cookieObject);
       setCookiesList(cookies);
     }
-    console.log("cookiesList", cookiesList);  
   }, [showBanner]);
 
   // click outside closes cookie banner

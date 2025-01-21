@@ -52,7 +52,7 @@ export async function sendEmail(emailFormObject: EmailFormObjectType) {
   // Send Mail
 
   try {
-    const info = await transporter.sendMail({
+    await transporter.sendMail({
       from: `"HANS" <${process.env.NEXT_EMAIL_USER!}>`, // sender address
       to: process.env.NEXT_EMAIL_TO!, // list of receivers
       replyTo: `"${validatedFormObject.name}" <${validatedFormObject.email}>`, // name and email from form
