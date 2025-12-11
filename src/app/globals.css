@@ -7,7 +7,7 @@
   --color-accent: hsl(165 26% 69%);
   --color-text: hsl(228 8% 12%);
   --color-action: hsl(354 70% 50%);
-  --color-actionlight: var(#f0959e);
+  --color-actionlight: #f0959e;
   --color-warning: hsl(19 100% 52%);
   --color-input: hsl(165 26% 69%);
   --color-foreground: hsl(228 8% 12%);
@@ -106,29 +106,31 @@
   }
 }
 
-/** Styling of audio player **/
-.rhap_main-controls-button,
-.rhap_volume-button {
-  @apply text-secondary !important;
-}
-.rhap_progress-bar {
-  @apply bg-accent/50 !important;
-}
-.rhap_download-progress {
-  @apply bg-accent !important;
-}
-.rhap_progress-filled {
-  @apply bg-secondary !important;
-}
-.rhap_progress-indicator {
-  @apply bg-secondary !important;
-}
+@layer components {
+  /** Styling of audio player **/
+  .rhap_main-controls-button,
+  .rhap_volume-button {
+    @apply text-secondary;
+  }
+  .rhap_progress-bar {
+    @apply bg-accent/50;
+  }
+  .rhap_download-progress {
+    @apply bg-accent;
+  }
+  .rhap_progress-filled {
+    @apply bg-secondary;
+  }
+  .rhap_progress-indicator {
+    @apply bg-secondary;
+  }
 
-.rhap_volume-bar {
-  @apply bg-accent/50 !important;
-}
-.rhap_volume-indicator {
-  @apply bg-secondary !important;
+  .rhap_volume-bar {
+    @apply bg-accent/50;
+  }
+  .rhap_volume-indicator {
+    @apply bg-secondary;
+  }
 }
 
 @layer utilities {

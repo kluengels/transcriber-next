@@ -11,7 +11,7 @@ import { createReadStream } from "fs";
 import mime from "mime";
 
 import { Database, Tables } from "../supabaseTypes";
-import { SafeParseReturnType } from "zod";
+
 import {
   OpenAiKeySchema,
   OtpSchema,
@@ -430,7 +430,7 @@ export async function updateProject({
   try {
     const supabase = await createSupaseServerClient();
     // validate User input
-    let result: SafeParseReturnType<string, string> | undefined;
+    let result;
     if (newTitle) {
       result = ProjectSchema.shape.projectname.safeParse(newTitle);
     } else if (newDescription) {

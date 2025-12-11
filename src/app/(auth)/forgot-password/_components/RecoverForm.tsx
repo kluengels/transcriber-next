@@ -68,12 +68,16 @@ export default function RecoverForm() {
         if (!result.success) {
           // create and display errorMessage
           const errorMessage = result.error.issues[0].message;
-          return toast.error(errorMessage);
+          toast.error(errorMessage);
+          return;
         }
 
         // form calls server action, pass in ZOD-validated email address
         const { data, error } = await resetPassword(result.data);
-        if (error) return toast.error(error);
+        if (error) {
+          toast.error(error);
+          return;
+        }
         if (data && result.data) {
           // trigger step 2
           router.push(`?email=${result.data}`);

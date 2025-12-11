@@ -1,6 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { useLayoutEffect, useRef, type ReactNode } from "react";
+import { useLayoutEffect, useRef, type ReactNode, type RefObject } from "react";
 import { BiX } from "react-icons/bi";
 import { useOnClickOutside } from "usehooks-ts";
 
@@ -23,8 +23,8 @@ function HtmlModalFromServer({ children }: HtmlModalProps) {
   }, [modal]);
 
   // Close modal when user clicks outside
-  const innerModalRef = useRef(null);
-  useOnClickOutside(innerModalRef, () => router.back());
+  const innerModalRef = useRef<HTMLDivElement>(null);
+  useOnClickOutside(innerModalRef as RefObject<HTMLElement>, () => router.back());
 
   return (
     <dialog

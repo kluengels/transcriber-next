@@ -1,7 +1,7 @@
 // HTML standard Modal with dialog-element
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, type RefObject } from "react";
 import type { Dispatch, ReactNode, SetStateAction } from "react";
 import { useOnClickOutside } from "usehooks-ts";
 import { BiX } from "react-icons/bi";
@@ -24,8 +24,8 @@ function HtmlModal({ showModal, setShowModal, children }: HtmlModalProps) {
   }, [showModal]);
 
   // Close modal when user clicks outside
-  const innerModalRef = useRef(null);
-  useOnClickOutside(innerModalRef, () => {
+  const innerModalRef = useRef<HTMLDivElement>(null);
+  useOnClickOutside(innerModalRef as RefObject<HTMLElement>, () => {
     setShowModal(false);
   });
 

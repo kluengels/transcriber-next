@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, type RefObject } from "react";
 import { BiMenu, BiX } from "react-icons/bi";
 import { useOnClickOutside } from "usehooks-ts";
 import { MenuItems } from "./MenuItems";
@@ -9,8 +9,8 @@ import AuthButton from "./AuthButton";
 
 export default function Hamburger({ user }: { user: User | null }) {
   const [expandMenu, setExpandMenu] = useState(false);
-  const ref = useRef(null);
-  useOnClickOutside(ref, () => {
+  const ref = useRef<HTMLDivElement>(null);
+  useOnClickOutside(ref as RefObject<HTMLElement>, () => {
     setExpandMenu(false);
   });
 

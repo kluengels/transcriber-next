@@ -18,7 +18,8 @@ export default function NewPasswordForm({ email }: { email: string }) {
       action={async (formData) => {
         // check if passwords match
         if (formData.get("password") !== formData.get("repeatpassword")) {
-          return toast.error("Passwords do not match");
+          toast.error("Passwords do not match");
+          return;
         }
 
         // get Password from formData

@@ -67,6 +67,7 @@ export async function convertAudio({
     // Read converted file and return it
     const data = await ffmpeg.readFile(`output.${targetFormat}`);
   
+    // @ts-ignore: File constructor is available in the edge runtime
     return new File([data], `output.${targetFormat}`, {
       type: `audio/${targetFormat}`,
     });

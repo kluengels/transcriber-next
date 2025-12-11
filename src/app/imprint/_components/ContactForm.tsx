@@ -37,13 +37,16 @@ export default function ContactForm({
     const { error } = await sendEmail(result.data);
 
     if (error && error !== "security") {
-      return toast.error("Failed to send message, please send us an email");
+       toast.error("Failed to send message, please send us an email");
     } else if (error && error === "security") {
-      return toast.error("Your answer to the security question is wrong");
+       toast.error("Your answer to the security question is wrong");
     } else {
       formRef?.current?.reset();
-      return toast.success("Message sent");
-    }
+       toast.success("Message sent");
+      
+    } 
+      return;
+  
   }
 
   return (

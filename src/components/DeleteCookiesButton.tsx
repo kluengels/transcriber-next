@@ -1,6 +1,6 @@
 "use client";
 import { getCookies, deleteCookie } from "cookies-next";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type RefObject } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -30,8 +30,8 @@ export default function DeleteCookiesButton() {
   }, [showBanner]);
 
   // click outside closes cookie banner
-  const ref = useRef(null);
-  useOnClickOutside(ref, () => setShowBanner(false));
+  const ref = useRef<HTMLDivElement>(null);
+  useOnClickOutside(ref as RefObject<HTMLElement>, () => setShowBanner(false));
 
   // delete all cookies
   function handleDelete() {
