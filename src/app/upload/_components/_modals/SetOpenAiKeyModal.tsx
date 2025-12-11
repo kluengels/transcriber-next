@@ -27,7 +27,7 @@ export function SetOpenAiKeyModal({
   const [alert, setAlert] = useState<string>("");
 
   // timeout cleanup
-  const timer = useRef<NodeJS.Timeout>();
+  const timer = useRef<NodeJS.Timeout>(undefined);
 
   useEffect(() => {
     const timeOut = timer.current;

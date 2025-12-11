@@ -1,5 +1,5 @@
 import { passwordValidation } from "@/lib/types";
-import { Dispatch, ReactNode, SetStateAction, useState } from "react";
+import { Dispatch, ReactNode, SetStateAction, useState, type JSX } from "react";
 
 export function EmailField({
   name = "email",

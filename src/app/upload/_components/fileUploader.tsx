@@ -1,10 +1,4 @@
-import React, {
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  useEffect,
-  useState,
-} from "react";
+import React, { Dispatch, SetStateAction, useCallback, useEffect, useState, type JSX } from "react";
 
 // Dropzone imports
 import { useDropzone } from "react-dropzone";
