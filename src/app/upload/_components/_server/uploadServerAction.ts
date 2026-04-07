@@ -116,7 +116,7 @@ export async function uploadServerAction(formData: FormData) {
     try {
       duration = (await getAudioDurationInSeconds(pathToFile)) as number;
       // console.log("duration", duration);
-    } catch  {
+    } catch {
       throw "Failed to get audio duration";
     }
 
@@ -219,12 +219,12 @@ const writeToDisc = async (file: File, projectFolder: string | undefined) => {
     // create a random named folder for the project
     const uniqueID = (Date.now() + Math.round(Math.random() * 1e4)).toString();
     if (!uniqueID) throw "Failed to create unique name for project folder";
-    const pathToProjectFolder = join(__dirname, "..", "tmpFiles", uniqueID);
+    const pathToProjectFolder = join("/tmp", "tmpFiles", uniqueID);
     projectFolder = await mkdir(pathToProjectFolder, {
       recursive: true,
     });
     if (!projectFolder) throw "failed to create project Folder";
-  } catch  {
+  } catch {
     throw "Failed to write project Folder";
   }
 
@@ -331,7 +331,7 @@ const createChunks = async (
       recursive: true,
     });
     if (!chunksFolder) throw "Failed to create a folder for chunks";
-  } catch  {
+  } catch {
     throw "Failed to create a folder for chunks";
   }
 
@@ -346,7 +346,7 @@ const createChunks = async (
     // use ffmpeg to create chunks
     await splitAudio(inputPath, outputPath, chunkDuration);
     // console.log("> chunks written to disk");
-  } catch  {
+  } catch {
     throw "Failed to split file";
   }
 
