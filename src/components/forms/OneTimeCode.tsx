@@ -26,7 +26,7 @@ export function OneTimeCode({
   const [alert, setAlert] = useState<string>("");
   const [success, setSuccess] = useState<boolean>(false);
 
-  // Submit will be fired as soon as all six numbers are enterd
+  // Submit will be fired as soon as all numbers are enterd
   async function onSubmit() {
     setIsValidating(true);
     const { data, error } = await confirmOtp(email, otp, type);
@@ -55,7 +55,7 @@ export function OneTimeCode({
       <form className="mx-auto mt-4">
         <OTPInput
           autoFocus
-          maxLength={6}
+          maxLength={8}
           className="max-w-full"
           containerClassName=" group flex items-center has-[:disabled]:opacity-30 "
           render={({ slots }) => (

@@ -218,10 +218,10 @@ function UploadForm({ userId }: { userId: string }) {
     setUserCredits(credits);
 
     // get openAiKey
-    const { data: openAiKey, error: errorKEy } = await getOpenAiKey(userId);
+    const { data: openAiKey, error: errorKey } = await getOpenAiKey();
 
     // open modal to let user enter his own OpenAi key if free credits are unsufficent and no key is set yet
-    if (credits - duration < 0 && (!openAiKey || errorKEy)) {
+    if (credits - duration < 0 && (!openAiKey || errorKey)) {
       setShowOpenAiKeyModal(true);
       // open modal with pricing info if free credits are unsufficent but a key is set
     } else if (credits - duration < 0 && openAiKey) {

@@ -114,10 +114,10 @@ export const OpenAiKeySchema = z
   .max(300, { message: "Must not be no longer than 300 characters" });
 
 // OTP Validation
-export const otpValidation = new RegExp(/^[0-9]{6}$/);
+export const otpValidation = new RegExp(/^[0-9]{8}$/);
 export const OtpSchema = z
   .string()
-  .regex(otpValidation, { message: "Must be six digits" });
+  .regex(otpValidation, { message: "Must be eight digits" });
 
 /* Validation for contact form */
 

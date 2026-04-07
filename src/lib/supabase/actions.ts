@@ -21,7 +21,7 @@ import {
 } from "@/lib/types";
 
 /**
- * Sign user in into supbase
+ * Sign user in into supabase
  * @param existingUser object with email and password
  */
 export default async function signInUser(existingUser: unknown) {
@@ -668,7 +668,6 @@ export async function deleteOpenAiKey() {
     if (error) throw error;
     return {};
   } catch (error) {
-   
     return { error: getErrorMessage(error) };
   }
 }
@@ -676,21 +675,26 @@ export async function deleteOpenAiKey() {
 /**
  * Get users own API key from supabase and decrypt it
  */
-export async function getOpenAiKey(userId: string) {
+export async function getOpenAiKey() {
   try {
     const supabase = await createSupaseServerClient();
+    const { data: userData, error: userError } = await supabase.auth.getUser();
+    if (userError) throw userError;
+    const userId = userData.user.id;
+
     const { data, error } = await supabase
       .from("open_ai_keys")
       .select("api_key")
-      .eq("id", userId);
+      .eq("id", userId)
+      .single();
 
-    if (error || !data || !data[0].api_key) throw "Failed to fetch OpenAI Key";
+    if (error || !data?.api_key) throw "Failed to fetch OpenAI Key";
 
     // decrypt API KEY
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     const Cryptr = require("cryptr");
     const cryptr = new Cryptr(process.env.NEXT_CRYTR_KEY!);
-    const decryptedApiKey = cryptr.decrypt(data[0].api_key) as string;
+    const decryptedApiKey = cryptr.decrypt(data.api_key) as string;
     return { data: decryptedApiKey };
   } catch (error) {
     return { error: getErrorMessage(error) };

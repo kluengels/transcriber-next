@@ -263,7 +263,7 @@ const checkCredits = async (
       throw "Failed to get the amount of free credits";
 
     // get openAiKey
-    const { data: openAiKey, error: errorKey } = await getOpenAiKey(userId);
+    const { data: openAiKey, error: errorKey } = await getOpenAiKey();
 
     // project if free if user has enough free credits
     if (credits - duration > 0) return { data: { freeProject: true } };
