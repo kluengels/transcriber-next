@@ -28,7 +28,7 @@ function HtmlModalFromServer({ children }: HtmlModalProps) {
 
   return (
     <dialog
-      className="absolute top-20 bg-background shadow-2xl backdrop-blur-md backdrop:bg-black/50 md:w-[500px]"
+      className="m-auto bg-background shadow-2xl backdrop-blur-md backdrop:bg-black/50 md:w-[500px]"
       ref={modal}
     >
       <div ref={innerModalRef}>

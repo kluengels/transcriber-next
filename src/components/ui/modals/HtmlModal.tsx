@@ -33,7 +33,7 @@ function HtmlModal({ showModal, setShowModal, children }: HtmlModalProps) {
     <dialog
       ref={ref}
       onCancel={() => setShowModal(true)}
-      className="bg-background shadow-2xl backdrop:bg-black/50 backdrop:backdrop-blur-sm md:w-[500px]"
+      className="m-auto bg-background shadow-2xl backdrop:bg-black/50 backdrop:backdrop-blur-sm md:w-[500px]"
     >
       <div ref={innerModalRef}>
         <div className="pr-3 pt-3 text-right">
