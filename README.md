@@ -10,7 +10,7 @@ HANS fills this gap, giving users a convient way to upload their audio (or video
 are stored in the cloud and can be accessed from anywhere.
 
 ## Live Demo
-[https://hans.steffen-ermisch.de](https://hans.steffen-ermisch.de)
+~~[https://hans.steffen-ermisch.de](https://hans.steffen-ermisch.de)~~ (down for maintenance)
 
 ## Technologies
 
