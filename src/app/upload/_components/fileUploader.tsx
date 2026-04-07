@@ -1,7 +1,14 @@
-import React, { Dispatch, SetStateAction, useCallback, useEffect, useState, type JSX } from "react";
+import React, {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useState,
+  type JSX,
+} from "react";
 
 // Dropzone imports
-import { useDropzone } from "react-dropzone";
+import { useDropzone, FileRejection } from "react-dropzone";
 import { DropzoneRootProps, DropzoneInputProps } from "react-dropzone";
 
 // Icons
@@ -51,44 +58,52 @@ export default function FileUploader({
     };
   }, [file, setDuration]);
 
+  // max file size in bytes (default 50 MB)
+  const maxFileSize =
+    Number(process.env.NEXT_PUBLIC_MAX_FILE_SIZE) || 52_428_800;
+
   // Dropzone hooks
   const onDropAccepted = useCallback(
     (acceptedFiles: File[]) => {
-      if (
-        acceptedFiles[0].size >
-        (Number(process.env.NEXT_PUBLIC_MAX_FILE_SIZE) || 1000000000)
-      ) {
-        setFileError(
-          "Sorry, the selected file is too big. Please try another file",
-        );
-        setFile(undefined);
-        setDuration(undefined);
-        return;
-      }
       setFileError(undefined);
-
       setFile(acceptedFiles[0]);
     },
-    [setFile, setDuration],
+    [setFile],
   );
 
-  const onDropRejected = useCallback(() => {
-    setFile(undefined);
-    setDuration(undefined);
-    setFileError("Invalid file type. Please select a valid file type");
-  }, [setFile, setDuration]);
+  const onDropRejected = useCallback(
+    (rejectedFiles: FileRejection[]) => {
+      setFile(undefined);
+      setDuration(undefined);
+      const error = rejectedFiles[0]?.errors[0];
+      if (error?.code === "file-too-large") {
+        const limitMB = (maxFileSize / (1024 * 1024)).toFixed(0);
+        setFileError(
+          `File is too large. Maximum allowed size is ${limitMB} MB.`,
+        );
+      } else {
+        setFileError(
+          "Invalid file type. Please select a valid audio or video file.",
+        );
+      }
+    },
+    [setFile, setDuration, maxFileSize],
+  );
 
   //  Dropzone Configuration
   const { getRootProps, getInputProps } = useDropzone({
     onDropAccepted,
     onDropRejected,
     maxFiles: 1,
+    maxSize: maxFileSize,
     accept: acceptedFileTpyes,
   });
 
   return (
     <section className="my-6 h-full w-full">
-      <span className="mb-1 text-sm">Select your recording</span>
+      <span className="mb-1 text-sm">
+        Select your recording (max file size is 50 MB in this demo)
+      </span>
       <div
         {...getRootProps({ className: "dropzone" } as DropzoneRootProps)}
         className="flex h-36 flex-col items-center justify-center bg-gray-50"
@@ -101,7 +116,7 @@ export default function FileUploader({
       </div>
 
       {file && (
-        <aside className="mt-2 flex items-center justify-between bg-background">
+        <aside className="bg-background mt-2 flex items-center justify-between">
           <div className="flex">
             {" "}
             <>
@@ -116,7 +131,7 @@ export default function FileUploader({
             </>
           </div>
           <div
-            className="rounded-md p-2 hover:cursor-pointer hover:bg-actionlight"
+            className="hover:bg-actionlight rounded-md p-2 hover:cursor-pointer"
             onClick={() => {
               setFile(undefined);
               setDuration(undefined);
@@ -127,7 +142,7 @@ export default function FileUploader({
         </aside>
       )}
       {fileError && (
-        <aside className="mt-2 p-2 text-sm text-warning">{fileError}</aside>
+        <aside className="text-warning mt-2 p-2 text-sm">{fileError}</aside>
       )}
     </section>
   );
