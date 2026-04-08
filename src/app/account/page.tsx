@@ -43,7 +43,7 @@ export default async function Account({ searchParams }: AccountProps) {
   if (error || !user) redirect("/error");
 
   // get API key from supabase
-  const { data: apiKeyData } = await getOpenAiKey(user.user.id);
+  const { data: apiKeyData } = await getOpenAiKey();
   let apiKey = "";
   if (apiKeyData) {
     apiKey = apiKeyData;

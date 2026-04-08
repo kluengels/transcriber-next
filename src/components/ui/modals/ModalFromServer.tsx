@@ -24,15 +24,17 @@ function HtmlModalFromServer({ children }: HtmlModalProps) {
 
   // Close modal when user clicks outside
   const innerModalRef = useRef<HTMLDivElement>(null);
-  useOnClickOutside(innerModalRef as RefObject<HTMLElement>, () => router.back());
+  useOnClickOutside(innerModalRef as RefObject<HTMLElement>, () =>
+    router.back(),
+  );
 
   return (
     <dialog
-      className="absolute top-20 bg-background shadow-2xl backdrop-blur-md backdrop:bg-black/50 md:w-[500px]"
+      className="bg-background m-auto shadow-2xl backdrop-blur-md backdrop:bg-black/50 md:w-[500px]"
       ref={modal}
     >
       <div ref={innerModalRef}>
-        <div className="pr-3 pt-3 text-right">
+        <div className="pt-3 pr-3 text-right">
           <button
             onClick={() => {
               router.back();
