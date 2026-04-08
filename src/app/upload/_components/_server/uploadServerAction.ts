@@ -219,7 +219,7 @@ const writeToDisc = async (file: File, projectFolder: string | undefined) => {
     // create a random named folder for the project
     const uniqueID = (Date.now() + Math.round(Math.random() * 1e4)).toString();
     if (!uniqueID) throw "Failed to create unique name for project folder";
-    const pathToProjectFolder = join("/tmp", "tmpFiles", uniqueID);
+    const pathToProjectFolder = join(process.cwd(), "tmpFiles", uniqueID);
     projectFolder = await mkdir(pathToProjectFolder, {
       recursive: true,
     });
