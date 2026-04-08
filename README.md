@@ -10,7 +10,8 @@ HANS fills this gap, giving users a convient way to upload their audio (or video
 are stored in the cloud and can be accessed from anywhere.
 
 ## Live Demo
-~~[https://hans.steffen-ermisch.de](https://hans.steffen-ermisch.de)~~ (down for maintenance)
+[https://hans.steffen-ermisch.de](https://hans.steffen-ermisch.de) 
+Note: The demo uses Supabase managed service. Due to this file-uploads are restrictricted to 50 MB. The Next.js-app is hosted on a Hetzner VPS, deployed via Coolify. 
 
 ## Technologies
 
@@ -20,7 +21,7 @@ are stored in the cloud and can be accessed from anywhere.
 - Database: [Supabase](https://supabase.com/)
 - Authentication: [Supabase](https://supabase.com/)
 - Text editor: [TipTap](https://tiptap.dev/)
-- Deployment: Docker
+- Deployment: Docker / Coolify 
 - Audio / Video transformation: [FFmpeg](https://ffmpeg.org/) and [ffmpeg.wasm](https://ffmpegwasm.netlify.app/)
 
 ## Structure
