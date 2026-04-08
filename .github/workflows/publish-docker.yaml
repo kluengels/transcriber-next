@@ -35,6 +35,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
+          # Ensure the image is pushed with the `latest` tag (needed by Coolify)
+          tags: kluengels/hans:latest,${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           platforms: "linux/arm64"
