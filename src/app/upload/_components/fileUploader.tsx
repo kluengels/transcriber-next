@@ -1,4 +1,4 @@
-import React, {
+import  {
   Dispatch,
   SetStateAction,
   useCallback,
@@ -39,21 +39,47 @@ export default function FileUploader({
     if (!file) return;
     setDuration(undefined);
 
+    let cancelled = false;
+
     // create Audio object as soon as file exists
     const url = URL.createObjectURL(file);
     const audio = new Audio(url);
 
-    // get Duration
+    // get Duration via native Audio element
     const getDuration = () => {
-      setDuration(audio.duration);
+      const d = audio.duration;
+      if (d && isFinite(d) && !isNaN(d)) {
+        if (!cancelled) setDuration(d);
+        console.log("Audio duration (native): ", d);
+      }
+    };
+
+    // Fallback: use FFmpeg to read duration when the browser can't decode the
+    // file (e.g. Safari + MKV / unsupported container)
+    const handleError = async () => {
+      console.log(
+        "Native Audio element failed, falling back to FFmpeg for duration",
+      );
+      try {
+        const d = await getDurationViaFFmpeg(file);
+        if (!cancelled && d !== undefined) {
+          setDuration(d);
+          console.log("Audio duration (FFmpeg): ", d);
+        }
+      } catch (e) {
+        console.warn("FFmpeg duration extraction failed:", e);
+      }
     };
 
     // wait for loading audio
     audio.addEventListener("durationchange", getDuration, false);
+    audio.addEventListener("error", handleError, false);
 
     // cleanup
     return () => {
+      cancelled = true;
       audio.removeEventListener("durationchange", getDuration, false);
+      audio.removeEventListener("error", handleError, false);
       URL.revokeObjectURL(url);
     };
   }, [file, setDuration]);
@@ -181,4 +207,59 @@ function formatDuration(duration: number) {
   return `${hours.toString().padStart(2, "0")}:${minutes
     .toString()
     .padStart(2, "0")}:${seconds.toString().padStart(2, "0")} (hh:mm:ss)`;
+}
+
+/**
+ * Use FFmpeg to extract the duration from files that the browser cannot
+ * decode natively (e.g. MKV in Safari).  FFmpeg always logs the container
+ * duration during input analysis, so we capture it from the log output.
+ */
+async function getDurationViaFFmpeg(file: File): Promise<number | undefined> {
+  const { FFmpeg } = await import("@ffmpeg/ffmpeg");
+  const { toBlobURL, fetchFile } = await import("@ffmpeg/util");
+  const baseURL = "/ffmpeg";
+
+  const ffmpeg = new FFmpeg();
+  let duration: number | undefined;
+
+  try {
+    await ffmpeg.load({
+      coreURL: await toBlobURL(`${baseURL}/ffmpeg-core.js`, "text/javascript"),
+      wasmURL: await toBlobURL(
+        `${baseURL}/ffmpeg-core.wasm`,
+        "application/wasm",
+      ),
+      workerURL: await toBlobURL(
+        `${baseURL}/ffmpeg-core.worker.js`,
+        "text/javascript",
+      ),
+    });
+
+    const extension = file.name.split(".").pop() || "bin";
+    const inputFileName = `input.${extension}`;
+    await ffmpeg.writeFile(inputFileName, await fetchFile(file));
+
+    // Capture duration from FFmpeg's input-analysis log line, e.g.:
+    //   "Duration: 01:23:45.67, start: ..."
+    ffmpeg.on("log", ({ message }) => {
+      const match = message.match(
+        /Duration:\s*(\d{2}):(\d{2}):(\d{2})\.(\d{2})/,
+      );
+      if (match) {
+        duration =
+          parseInt(match[1]) * 3600 +
+          parseInt(match[2]) * 60 +
+          parseInt(match[3]) +
+          parseInt(match[4]) / 100;
+      }
+    });
+
+    // Run with no real output – FFmpeg will fail but still emit the duration
+    // in its input-analysis output before bailing out.
+    await ffmpeg.exec(["-i", inputFileName]).catch(() => {});
+
+    return duration;
+  } finally {
+    ffmpeg.terminate();
+  }
 }
